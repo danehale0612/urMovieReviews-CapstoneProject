@@ -20,6 +20,7 @@
 
 		
 
+		//***************************** search bar function ****************************
 
 		function searchMovies(request, response) {
 		    console.log(request);
@@ -41,6 +42,9 @@
 		};// End of searchMovies function
 
 
+
+		//**************************** Grab individual movie info from OMDBapi.com ************************
+
 		function grabMovieInfo (ui) {
 			
 			// console.log(ui.item);	
@@ -58,24 +62,75 @@
 			 
 			        
 			        }); //End of ajax
+
+			        $('form').show();
 		};
+
+
+
+		//****************************** Populate movie info to Form ***************************
 
 
 		function populateMovieInfo(data) {
 			$('#putMovieInfo').html(" ");
-			$('#putMovieInfo').append('<input type="hidden" id="posterInput" value="'+data.Poster+'"><img id="moviePoster" src="'+data.Poster+'"></img><div id="movieInfo"><input type="hidden" id="titleInput" value="'+data.Title+'"><div id="title">'+data.Title+'</div><input type="hidden" id="yearInput" value="'+data.Year+'"><div id="year">('+data.Year+')</div><input type="hidden" id="ratedInput" value="'+data.Rated+'"><div id="rated">'+data.Rated+'</div><input type="hidden" id="lengthInput" value="'+data.Runtime+'"><div id="length">'+data.Runtime+'</div><input type="hidden" id="genreInput" value="'+data.Genre+'"><div id="genre">'+data.Genre+'</div><input type="hidden" id="releasedInput" value="'+data.Released+'"><div id="released">'+data.Released+'</div><input type="hidden" id="plotInput" value="'+data.Plot+'"><div id="plot">'+data.Plot+'</div><input type="hidden" id="directorInput" value="'+data.Director+'"><div id="director">Director: '+data.Director+'</div><input type="hidden" id="writerInput" value="'+data.Writer+'"><div id="writer">Writer: '+data.Writer+'</div><input type="hidden" id="actorsInput" value="'+data.Actors+'"><div id="actors">Stars: '+data.Actors+'</div></div>');
+			$('#putMovieInfo').append(
+				//Hidden input values to send to JSON reviewedMovie object
+				'<input type="hidden" id="posterInput" value="'+data.Poster+'">'+
+				'<input type="hidden" id="titleInput" value="'+data.Title+'">'+
+				'<input type="hidden" id="yearInput" value="'+data.Year+'">'+
+				'<input type="hidden" id="ratedInput" value="'+data.Rated+'">'+
+				'<input type="hidden" id="lengthInput" value="'+data.Runtime+'">'+
+				'<input type="hidden" id="genreInput" value="'+data.Genre+'">'+
+				'<input type="hidden" id="releasedInput" value="'+data.Released+'">'+
+				'<input type="hidden" id="plotInput" value="'+data.Plot+'">'+
+				'<input type="hidden" id="directorInput" value="'+data.Director+'">'+
+				'<input type="hidden" id="writerInput" value="'+data.Writer+'">'+
+				'<input type="hidden" id="actorsInput" value="'+data.Actors+'">'+
 
+				//This is actually what shows up on the form 
+				'<img id="moviePoster" src="'+data.Poster+'"></img>'+
+				'<div id="movieInfo"><div id="title">'+data.Title+'</div>' +
+				'<div id="year">('+data.Year+')</div>' +
+				'<div id="rated">'+data.Rated+'</div>'+
+				'<div id="length">'+data.Runtime+'</div>'+
+				'<div id="genre">'+data.Genre+'</div>'+
+				'<div id="released">'+data.Released+'</div>'+
+				'<div id="plot">'+data.Plot+'</div>'+
+				'<div id="director">Director: '+data.Director+'</div>'+
+				'<div id="writer">Writer: '+data.Writer+'</div>'+
+				'<div id="actors">Stars: '+data.Actors+'</div></div>'
+				);
+
+		};//End of populateMovieInfo function
+
+
+
+		function clearForm() {
+			$('#putMovieInfo').html(" ");
+			$('input').each(function() {
+				$('input').val(' ');
+				$('textarea').val(' ');
+			});
+			$('form').hide();
 		};
 
 
-	//*********************** DOCUMENT.READY STARTS HERE **************************
+
+
+	//*********************** DOCUMENT.READY STARTS HERE *******************************
 
 		$(document).ready(function() {
 
+			$('form').hide();
 
-			$('#movieTable').tooltip({
-      selector: "a[data-toggle=tooltip]", html: "true"
-    })
+			//************************** Popover function call *******************
+			$('#movieTable').popover({
+		      selector: "a[data-toggle=popover]", html: "true"
+		    });
+
+
+
+			//************************ Refresh Table Call *******************
 
 			$.ajax({
 			url: "backliftapp/movieDatabase",
@@ -84,17 +139,30 @@
 			success: function (data) {
 				for(var i = 0; i < data.length; i++) {
 					refreshMovieTable(data[i]);
-				}
+					}
 				}
 
 			}); //End of ajax
 
 
+			//************************ search bar autocomplete (plugin) call ********************
+
 
     		$("#testing").autocomplete( { source: searchMovies, delay: 800, select: function(select, ui) {grabMovieInfo(ui);} });
+
+
+
+
    
+   			//************************ Send form data to JSON object on movieDatabase ********************
 
 			$('#submitMovieReview').click(function() {
+
+
+				var string = $('#review').val();
+				var newstring = string.replace(/"/g, '&#34');
+
+
 				reviewedMovie = {
 				poster: $("#posterInput").val(),
 				title: $("#titleInput").val(),
@@ -102,8 +170,9 @@
 				runtime: $("#lengthInput").val(),
 				yearReleased: $("#yearInput").val(),
 				dateWatched: $("#movieDateWatched").val(),
-				review: $("#review").val()
+				review: newstring
 				};
+ 
 
 				$.ajax({
 					url: "backliftapp/movieDatabase",
@@ -115,24 +184,80 @@
 					}
 				});
 
-
 				
-				
+				clearForm();
 
 
 			}); // End of submitData.click
 
+
+			$('#cancelMovieReview').click(function() {
+
+				clearForm();
+
+			});
+
 			
 
-		function addMovieToTable (reviewedMovie) {
-			$('#movieTable').append('<tr><td><img class="posterThumbnail" src="'+reviewedMovie.poster+'" style="max-height: 40px;"/></td><td><a href="#" data-toggle="tooltip" title data-original-title="<img src='+reviewedMovie.poster+'></img>Review: '+reviewedMovie.review+' ">'+reviewedMovie.title+'</a></td><td>?</td><td>'+reviewedMovie.yearReleased+'</td><td>'+reviewedMovie.dateWatched+'</td><td>'+reviewedMovie.rating+'</td><td>'+reviewedMovie.runtime+'</td><td><button id="deleteButton" type="submit" class="btn" onClick="deleteMovie(\'' + reviewedMovie.id + '\')">delete</button></td></tr>')
 
-		};
 
-		function refreshMovieTable (reviewedMovie) {
-			$('<tr><td title="Review: '+reviewedMovie.review+'">'+reviewedMovie.title+'</td><td>?</td><td>'+reviewedMovie.yearReleased+'</td><td>'+reviewedMovie.dateWatched+'</td><td>'+reviewedMovie.rating+'</td><td>'+reviewedMovie.runtime+'</td><td><button id="deleteButton" type="submit" class="btn" onClick="deleteMovie(\'' + reviewedMovie.id + '\')">delete</button></td></tr>').appendTo('#movieTable');
+			function addMovieToTable (reviewedMovie) {
+				$('#movieTable').append(
+					'<tr id="'+reviewedMovie.title+'">'+
+						'<td><img class="posterThumbnail" src="'+reviewedMovie.poster+'" style="max-height: 40px;"/></td>'+
+						'<td>'+
+							'<a href="#'+reviewedMovie.title+'" id="movieStuff" data-toggle="popover" '+
 
-		};
+								'title data-original-title="'+
+									'<img src='+reviewedMovie.poster+'></img>'+
+									'<h3>'+reviewedMovie.title+'</h3>'+
+									'<h4>('+reviewedMovie.yearReleased+')</h4>" '+
+
+								'data-content="'+
+									'<h4>Review:</h4>'+
+									'<p>'+reviewedMovie.review+'</p> "'+
+
+							'>'+reviewedMovie.title+''+
+							'</a>'+
+						'</td>'+
+						'<td>?</td><td>'+reviewedMovie.yearReleased+'</td>'+
+						'<td>'+reviewedMovie.dateWatched+'</td><td>'+reviewedMovie.rating+'</td>'+
+						'<td>'+reviewedMovie.runtime+'</td>'+
+						'<td><button id="deleteButton" type="submit" class="btn" onClick="deleteMovie(\'' + reviewedMovie.id + '\')">delete</button></td>'+
+					'</tr>'
+				)
+
+			};//End of addMovieToTable function
+
+
+			function refreshMovieTable (reviewedMovie) {
+				$(
+					'<tr id="'+reviewedMovie.title+'">'+
+						'<td><img class="posterThumbnail" src="'+reviewedMovie.poster+'" style="max-height: 40px;"/></td>'+
+						'<td>'+
+							'<a href="#'+reviewedMovie.title+'" id="movieStuff" data-toggle="popover" '+
+
+								'title data-original-title="'+
+									'<img src='+reviewedMovie.poster+'></img>'+
+									'<h3>'+reviewedMovie.title+'</h3>'+
+									'<h4>('+reviewedMovie.yearReleased+')</h4>" '+
+
+								'data-content="'+
+									'<h4>Review:</h4>'+
+									'<p>'+reviewedMovie.review+'</p> "'+
+
+							'>'+reviewedMovie.title+''+
+							'</a>'+
+						'</td>'+
+						'<td>?</td><td>'+reviewedMovie.yearReleased+'</td>'+
+						'<td>'+reviewedMovie.dateWatched+'</td><td>'+reviewedMovie.rating+'</td>'+
+						'<td>'+reviewedMovie.runtime+'</td>'+
+						'<td><button id="deleteButton" type="submit" class="btn" onClick="deleteMovie(\'' + reviewedMovie.id + '\')">delete</button></td>'+
+					'</tr>'
+
+				).appendTo('#movieTable');
+
+			};
 
 		
 
@@ -187,6 +312,7 @@ function deleteMovie (id) {
 						<textarea id="review" style="width: 700px; height: 200px;"></textarea>
 					</form>
 					<button id="submitMovieReview" type="submit" class="btn" aria-hidden="true">Submit</button>
+					<button id="cancelMovieReview" type="submit" class="btn" aria-hidden="true">Cancel</button>
 					<br>
 					<table id="urReviews" class="table table-hover">
 						<thead>
