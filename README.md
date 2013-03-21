@@ -45,10 +45,11 @@ review or I will push this review to a facebook note and update mystatus to read
 update 3/20/13:
 
 -In order to make these review more accessable to social network users I will move away from TwitterBootStrap popover to 
-hold the review submitted
+hold the review submitted (completed)
 
--I will make the submitted reviews display in a hidden div, so that when you click on the title of the movie in the table
-it will show the hidden div with the submitted review and the movie info cards that are displayed in the form.
+-I will make the submitted reviews display in a hidden div, so that when you click on the title of the movie in the table (completed)
+it will show the hidden div with the submitted review and the movie info cards that are displayed in the form. (completed)
+-have hidden <tr> sort (through table sort) with the visable <tr>
 
 
 	
