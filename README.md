@@ -51,6 +51,13 @@ hold the review submitted (completed)
 it will show the hidden div with the submitted review and the movie info cards that are displayed in the form. (completed)
 -have hidden <tr> sort (through table sort) with the visable <tr>
 
+update 3/21/13: 
+New strategy to display movie review from table:
+
+-scale the movie review table to half the size and float it left on the page
+-Have a div, floated right (next to movie review table) that will append the movie info and review when a title is clicked on the table
+
+This approach should make it easier to sort the table and to share the review through social networks
 
 	
 
