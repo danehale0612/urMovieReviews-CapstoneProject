@@ -4,6 +4,7 @@
 
 	<head>
 
+		<title>Ur Movie Reviews</title>
 
 		<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 
@@ -11,10 +12,18 @@
 		<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
 		<link href="css/urmoviereviews.css" rel="stylesheet">
 		<link href="css/jquery-ui-1.10.2.custom.min.css" rel="stylesheet">
+		<link href="rateit/src/rateit.css" rel="stylesheet">
+		<link href="jdpicker/jdpicker.css" rel="stylesheet">
+		
 		
 
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.10.2.custom.min.js"></script>
+		<script type="text/javascript" src="js/stupidtable.min.js"></script>
+		<script type="text/javascript" src="rateit/src/jquery.rateit.min.js"></script>
+		<script type="text/javascript" src="jdpicker/jquery.jdpicker.js"></script>
+
+		
 
 		<script>
 
@@ -23,7 +32,7 @@
 		//***************************** search bar function ****************************
 
 		function searchMovies(request, response) {
-		    console.log(request);
+		    
 		    $.ajax({
 		        url: "http://www.omdbapi.com/?s=" + request['term'] + "&r=JSON",
 		        type: "GET",
@@ -54,8 +63,6 @@
 			        type: "GET",
 			        dataType: "json",
 			        success: function (data) {
-			            	console.log(data);
-			            	console.log(data.tomatoMeter);
 			            	populateMovieInfo(data);
 
 			            }
@@ -63,7 +70,7 @@
 			        
 			        }); //End of ajax
 
-			        $('form').show();
+			        $('#reviewForm').show('slow');
 		};
 
 
@@ -86,20 +93,39 @@
 				'<input type="hidden" id="directorInput" value="'+data.Director+'">'+
 				'<input type="hidden" id="writerInput" value="'+data.Writer+'">'+
 				'<input type="hidden" id="actorsInput" value="'+data.Actors+'">'+
+				'<input type="hidden" id="rtScore" value="'+data.tomatoMeter+'">'+
+				'<input type="hidden" id="imdbID" value="'+data.imdbID+'">'+
+				'<input type="hidden" id="myRating">'+
+
+
 
 				//This is actually what shows up on the form 
-				'<img id="moviePoster" src="'+data.Poster+'"></img>'+
-				'<div id="movieInfo"><div id="title">'+data.Title+'</div>' +
-				'<div id="year">('+data.Year+')</div>' +
-				'<div id="rated">'+data.Rated+'</div>'+
-				'<div id="length">'+data.Runtime+'</div>'+
-				'<div id="genre">'+data.Genre+'</div>'+
-				'<div id="released">'+data.Released+'</div>'+
-				'<div id="plot">'+data.Plot+'</div>'+
-				'<div id="director">Director: '+data.Director+'</div>'+
-				'<div id="writer">Writer: '+data.Writer+'</div>'+
-				'<div id="actors">Stars: '+data.Actors+'</div></div>'
+				'<div id="posterMovie"><img id="moviePoster" src="'+data.Poster+'"></img></div>'+
+				'<div id="movieInfo">'+
+					'<div id="imdbInfo">'+
+						'<div id="titleYear">'+
+							'<div id="title">'+data.Title+'</div>'+' '+'('+data.Year+')'+
+						'</div>' +
+						'<div id="ratingRuntimeGenreRelease">'+
+							'<div id="rated"><strong>'+data.Rated+'</strong></div>'+
+							'<div id="length">'+data.Runtime+'</div>'+
+							'<div id="genre">'+data.Genre+'</div>'+
+							'<div id="released">'+data.Released+'</div>'+
+						'</div>'+
+						'<div id="plot">'+data.Plot+'</div>'+
+						'<div id="director"><strong>Director:</strong> '+data.Director+'</div>'+
+						'<div id="writer"><strong>Writer:</strong> '+data.Writer+'</div>'+
+						'<div id="actors"><strong>Stars:</strong> '+data.Actors+'</div>'+
+					'</div>'+
+					'<div id="rottenTomatoesDisplay">'+
+						'<div id="rottenTomatoesScore"><div id="tomatoHeader">TOMATOMETER:</div><br>'+data.tomatoMeter+'%</div>'+
+					'</div>'+
+				'</div>' 
 				);
+
+				addTomatoe(data);
+
+				
 
 		};//End of populateMovieInfo function
 
@@ -111,34 +137,140 @@
 				$('input').val(' ');
 				$('textarea').val(' ');
 			});
-			$('form').hide();
+			$('#reviewForm').hide('slow');
+		};
+
+		function addTomatoe(data) {
+			if (data.tomatoMeter < 60) {
+				$('#rottenTomatoesScore').append(' <img class="tomatoePic" src="img/tomatoes/RottenTomatoe.png" />');
+			} else if (data.tomatoMeter > 75) {
+				$('#rottenTomatoesScore').append(' <img class="tomatoePic" src="img/tomatoes/CertFreshTomatoe.png" />');
+			} else {
+				$('#rottenTomatoesScore').append(' <img class="tomatoePic" src="img/tomatoes/FreshTomatoe.png" />');
+			}
+		};
+
+		function addTomatoeToReview(data) {
+			if (data.rtscore < 60) {
+				$('#rottenTomatoesScoreSide').append(' <img class="tomatoePic" src="img/tomatoes/RottenTomatoe.png" />');
+			} else if (data.rtscore > 75) {
+				$('#rottenTomatoesScoreSide').append(' <img class="tomatoePic" src="img/tomatoes/CertFreshTomatoe.png" />');
+			} else {
+				$('#rottenTomatoesScoreSide').append(' <img class="tomatoePic" src="img/tomatoes/FreshTomatoe.png" />');
+			}
 		};
 
 
+		function testing (poster, title, year, rating, runtime, genre, rdate, plot, director, writer, actors, id, rtscore, review) {
 
+		}
+
+
+		// function displayReviewToDiv(poster, title, year, rating, runtime, genre, rdate, plot, director, writer, actors, id, rtscore, review) {
+		// 		console.log(id);
+		// 		$('#posterMovieSide').html(" ");
+		// 		$('#posterMovieSide').append('<img id="moviePosterSide" src="'+poster+'"></img>');
+
+
+		// 		$('#titleYearSide').html(" ");
+		// 		$('#titleYearSide').append('<div id="titleSide">'+title+'</div>'+' '+'('+year+')');
+
+		// 		$('#ratingRuntimeGenreReleaseSide').html(" ");
+		// 		$('#ratingRuntimeGenreReleaseSide').append('<div id="ratedSide"><strong>'+rating+'</strong></div>'+
+		// 										'<div id="lengthSide">'+runtime+'</div>'+
+		// 										'<div id="genreSide">'+genre+'</div>'+
+		// 										'<div id="releasedSide">'+rdate+'</div>');
+
+		// 		$('#imdbPeopleSide').html(" ");
+		// 		$('#imdbPeopleSide').append('<div id="plotSide">'+plot+'</div>'+
+		// 									'<div id="directorSide"><strong>Director:</strong> '+director+'</div>'+
+		// 									'<div id="writerSide"><strong>Writer:</strong> '+writer+'</div>'+
+		// 									'<div id="actorsSide"><strong>Stars:</strong> '+actors+'</div>');
+
+		// 		$('#rottenTomatoesDisplaySide').html(" ");
+		// 		$('#rottenTomatoesDisplaySide').append('<div id="'+id+'RTScoreSide"><div id="tomatoHeaderSide">TOMATOMETER:</div><br>'+rtscore+'%</div>');
+
+		// 		$('.reviewOfMovieSide').html(" ");
+		// 		$('.reviewOfMovieSide').append('<h4>Review:</h4>'+
+		// 						'<p>'+review+'</p>');
+		// 	};
+
+
+		function displayReviewToDiv(id) {
+				
+				$.ajax({
+			      url: "backliftapp/movieDatabase/" + id,
+			      type: "GET",
+			      dataType: "json",
+			      success: function (data) {
+
+			  
+			    $('#posterMovieSide').html(" ");
+				$('#posterMovieSide').append('<img id="moviePosterSide" src="'+data.poster+'"></img>');
+
+
+				$('#titleYearSide').html(" ");
+				$('#titleYearSide').append('<div id="titleSide">'+data.title+'</div>'+' '+'('+data.yearReleased+')');
+
+				$('#ratingRuntimeGenreReleaseSide').html(" ");
+				$('#ratingRuntimeGenreReleaseSide').append('<div id="ratedSide"><strong>'+data.rating+'</strong></div>'+
+												'<div id="lengthSide">'+data.runtime+'</div>'+
+												'<div id="genreSide">'+data.genre+'</div>'+
+												'<div id="releasedSide">'+data.releaseDate+'</div>');
+
+				$('#imdbPeopleSide').html(" ");
+				$('#imdbPeopleSide').append('<div id="plotSide">'+data.plot+'</div>'+
+											'<div id="directorSide"><strong>Director:</strong> '+data.director+'</div>'+
+											'<div id="writerSide"><strong>Writer:</strong> '+data.writer+'</div>'+
+											'<div id="actorsSide"><strong>Stars:</strong> '+data.actors+'</div>');
+
+				$('#rottenTomatoesDisplaySide').html(" ");
+				$('#rottenTomatoesDisplaySide').append('<div id="rottenTomatoesScoreSide"><div id="tomatoHeader">TOMATOMETER:</div><br>'+data.rtscore+'%</div>');
+
+				$('.reviewOfMovieSide').html(" ");
+				$('.reviewOfMovieSide').append('<h4>Review:</h4>'+
+								'<p>'+data.review+'</p>');
+
+
+			      	addTomatoeToReview(data);
+			      }//End of ajax Get success
+			    })//End of ajax Get
+				
+			};//End of displayReviewToDiv
+
+
+			
 
 	//*********************** DOCUMENT.READY STARTS HERE *******************************
 
 		$(document).ready(function() {
 
-			$('form').hide();
+
+			$("#simpleTable").stupidtable();
+
+			$('#reviewForm').hide();
 
 			//************************** Popover function call *******************
-			$('#movieTable').popover({
-		      selector: "a[data-toggle=popover]", html: "true"
-		    });
-
-
+		
+				
+			
 
 			//************************ Refresh Table Call *******************
 
 			$.ajax({
-			url: "backliftapp/movieDatabase",
-			type: "GET",
-			dataType: "json",
-			success: function (data) {
-				for(var i = 0; i < data.length; i++) {
-					refreshMovieTable(data[i]);
+				url: "backliftapp/movieDatabase",
+				type: "GET",
+				dataType: "json",
+				success: function (data) {
+					for(var i = 0; i < data.length; i++) {
+						refreshMovieTable(data[i]);
+					}
+
+
+					//Check to see if there is a previous movie to display
+
+					if (window.location.hash.length > 0) {
+						displayReviewToDiv(window.location.hash.substring(1));
 					}
 				}
 
@@ -158,9 +290,7 @@
 
 			$('#submitMovieReview').click(function() {
 
-
-				var string = $('#review').val();
-				var newstring = string.replace(/"/g, '&#34');
+				var myScorePercentage = ($('#backing2').val()/10)*100;
 
 
 				reviewedMovie = {
@@ -169,10 +299,20 @@
 				rating: $("#ratedInput").val(),
 				runtime: $("#lengthInput").val(),
 				yearReleased: $("#yearInput").val(),
-				dateWatched: $("#movieDateWatched").val(),
-				review: newstring
+				releaseDate: $("#releasedInput").val(),
+				dateWatched: $("#datePicker").val(),
+				director: $("#directorInput").val(),
+				writer: $("#writerInput").val(),
+				actors: $("#actorsInput").val(),
+				plot: $("#plotInput").val(),
+				genre: $("#genreInput").val(),
+				rtscore: $("#rtScore").val(),
+				imdbID: $("#imdbID").val(),
+				review: $('#review').val(),
+				myScore: myScorePercentage
 				};
- 
+ 				
+ 				
 
 				$.ajax({
 					url: "backliftapp/movieDatabase",
@@ -202,66 +342,90 @@
 
 
 			function addMovieToTable (reviewedMovie) {
+
 				$('#movieTable').append(
+					
 					'<tr id="'+reviewedMovie.title+'">'+
-						'<td><img class="posterThumbnail" src="'+reviewedMovie.poster+'" style="max-height: 40px;"/></td>'+
+						'<td><img class="displayMovieReview" src="'+reviewedMovie.poster+'" style="max-height: 40px;"/></td>'+
 						'<td>'+
-							'<a href="#'+reviewedMovie.title+'" id="movieStuff" data-toggle="popover" '+
-
-								'title data-original-title="'+
-									'<img src='+reviewedMovie.poster+'></img>'+
-									'<h3>'+reviewedMovie.title+'</h3>'+
-									'<h4>('+reviewedMovie.yearReleased+')</h4>" '+
-
-								'data-content="'+
-									'<h4>Review:</h4>'+
-									'<p>'+reviewedMovie.review+'</p> "'+
+							'<a href="#moviePosterSide" id="'+reviewedMovie.id+'" onClick="displayReviewToDiv(\'' + reviewedMovie.id + '\')" '+
 
 							'>'+reviewedMovie.title+''+
 							'</a>'+
 						'</td>'+
-						'<td>?</td><td>'+reviewedMovie.yearReleased+'</td>'+
-						'<td>'+reviewedMovie.dateWatched+'</td><td>'+reviewedMovie.rating+'</td>'+
-						'<td>'+reviewedMovie.runtime+'</td>'+
+						'<td>'+reviewedMovie.myScore+'%</td><td>'+reviewedMovie.rtscore+'%</td>'+
+						'<td>'+reviewedMovie.yearReleased+'</td><td>'+reviewedMovie.dateWatched+'</td>'+
 						'<td><button id="deleteButton" type="submit" class="btn" onClick="deleteMovie(\'' + reviewedMovie.id + '\')">delete</button></td>'+
 					'</tr>'
-				)
+					
+				);//End of append method
+				
+				
+
+				addTomatoeToReview(reviewedMovie.rtscore, reviewedMovie.id);
 
 			};//End of addMovieToTable function
 
 
+			// function refreshMovieTable (reviewedMovie) {
+		
+			// 	$(
+			// 		'<tr id="'+reviewedMovie.title+'">'+
+			// 			'<td><img class="posterThumbnail" src="'+reviewedMovie.poster+'" style="max-height: 40px;"/></td>'+
+			// 			'<td>'+
+			// 				'<a href="#moviePosterSide" id="'+reviewedMovie.id+'" onClick="displayReviewToDiv(\'' + reviewedMovie.poster + '\', \'' + reviewedMovie.title + '\', \'' + reviewedMovie.yearReleased + '\', \'' + reviewedMovie.rating + '\', \'' + reviewedMovie.runtime + '\', \'' + reviewedMovie.genre + '\', \'' + reviewedMovie.releaseDate + '\', \'' + reviewedMovie.plot + '\', \'' + reviewedMovie.director + '\',\'' + reviewedMovie.writer + '\', \'' + reviewedMovie.actors + '\', \'' + reviewedMovie.id + '\', \'' + reviewedMovie.rtscore + '\', \'' + reviewedMovie.review + '\')" '+
+
+			// 				'>'+reviewedMovie.title+''+
+			// 				'</a>'+
+			// 			'</td>'+
+			// 			'<td>?</td><td>'+reviewedMovie.rtscore+'%</td>'+
+			// 			'<td>'+reviewedMovie.yearReleased+'</td><td>'+reviewedMovie.dateWatched+'</td>'+
+			// 			'<td><button id="deleteButton" type="submit" class="btn" onClick="deleteMovie(\'' + reviewedMovie.id + '\')">delete</button></td>'+
+			// 		'</tr>'
+
+			// 	).appendTo('#movieTable');
+			// 		console.log(reviewedMovie.review);
+					
+			// 	$('.reviewRow').hide();
+
+			// 	addTomatoeToReview(reviewedMovie.rtscore, reviewedMovie.id);
+
+				
+			// };
+
 			function refreshMovieTable (reviewedMovie) {
+		
 				$(
 					'<tr id="'+reviewedMovie.title+'">'+
 						'<td><img class="posterThumbnail" src="'+reviewedMovie.poster+'" style="max-height: 40px;"/></td>'+
 						'<td>'+
-							'<a href="#'+reviewedMovie.title+'" id="movieStuff" data-toggle="popover" '+
-
-								'title data-original-title="'+
-									'<img src='+reviewedMovie.poster+'></img>'+
-									'<h3>'+reviewedMovie.title+'</h3>'+
-									'<h4>('+reviewedMovie.yearReleased+')</h4>" '+
-
-								'data-content="'+
-									'<h4>Review:</h4>'+
-									'<p>'+reviewedMovie.review+'</p> "'+
+							'<a href="#'+reviewedMovie.id+'" id="'+reviewedMovie.id+'" onClick="displayReviewToDiv(\'' + reviewedMovie.id + '\')" '+
 
 							'>'+reviewedMovie.title+''+
 							'</a>'+
 						'</td>'+
-						'<td>?</td><td>'+reviewedMovie.yearReleased+'</td>'+
-						'<td>'+reviewedMovie.dateWatched+'</td><td>'+reviewedMovie.rating+'</td>'+
-						'<td>'+reviewedMovie.runtime+'</td>'+
+						'<td>'+reviewedMovie.myScore+'%</td><td>'+reviewedMovie.rtscore+'%</td>'+
+						'<td>'+reviewedMovie.yearReleased+'</td><td>'+reviewedMovie.dateWatched+'</td>'+
 						'<td><button id="deleteButton" type="submit" class="btn" onClick="deleteMovie(\'' + reviewedMovie.id + '\')">delete</button></td>'+
 					'</tr>'
 
 				).appendTo('#movieTable');
+					
+					
+				$('.reviewRow').hide();
 
+				addTomatoeToReview(reviewedMovie.rtscore, reviewedMovie.id);
+
+				
 			};
+
+
+
+			
 
 		
 
-
+			
 			
 
 		});//End of doc.ready function
@@ -294,29 +458,42 @@ function deleteMovie (id) {
 
 			<div class="row>"
 				<div class="span12 box">
+						
 
-					<!--Form to Write Ur Review-->
-					<label for="testing">Search for A Movie</label>
-					<input id="testing">
-					<br>
-					<br>
-					<div id="putMovieInfo">
+						<div id="searchBar">
+							<label for="testing">Search for A Movie</label>
+							<input id="testing">
+						</div>
 
-					</div>
+						<!--Form to Write Ur Review-->
+						<br>
+						<br>
+						<div id="putMovieInfo">
+							<!-- This is where the populateMovieInfo goes -->
+						</div>
+						<div id="reviewForm">
+							<form>
+					 			<label for="review"><h3>Write Ur Review</h3></label>
+								<textarea id="review" style="width: 700px; height: 200px;"></textarea>
+								<br>
+							</form>
 
-					<form>
-			 			<label for="movieDateWatched">Date Watched</label>
-			 			<input id="movieDateWatched" type="text" placeholder="" style="width: 75px; height: 30px;">
-			 			<br>
-			 			<label for="review">Write Ur Review</label>
-						<textarea id="review" style="width: 700px; height: 200px;"></textarea>
-					</form>
-					<button id="submitMovieReview" type="submit" class="btn" aria-hidden="true">Submit</button>
-					<button id="cancelMovieReview" type="submit" class="btn" aria-hidden="true">Cancel</button>
-					<br>
-					<table id="urReviews" class="table table-hover">
+							<label for="rateit"><h3>Rate this movie:</h3></label>
+							<input type="range" min="0" max="10" step="0.5" id="backing2">
+							<div class="rateit" data-rateit-backingfld="#backing2"></div>
+
+							<label for="jdpicker"><h3>Date Watched:</h3></label>
+							<input type="text" id="datePicker" name="your_input" class="jdpicker" />
+						</div> <!--End of reviewForm -->
+						<div id="formButtons">
+							<button id="submitMovieReview" type="submit" class="btn" aria-hidden="true">Submit</button>
+							<button id="cancelMovieReview" type="submit" class="btn" aria-hidden="true">Cancel</button>
+						</div>
+						<br>
+
+					<table id="simpleTable" class="table table-hover">
 						<thead>
-							<tr><th> </th><th> Title </th><th>Grade</th><th>Year Released</th><th>Date Watched</th><th>Rating</th><th>Runtime</th></tr>
+							<tr><th> </th><th data-sort="string"> Title </th><th data-sort="int">Grade</th><th data-sort="int">RT Score</th><th data-sort="int">Year Released</th><th data-sort="string">Date Watched</th></tr>
 						</thead>
 						<tbody id="movieTable">
 							<tr>
@@ -324,6 +501,52 @@ function deleteMovie (id) {
 							</tr>
 						</tbody>
 					</table>
+
+					<div id="displayMovieReview">
+						<div class="movieInfoContainer">
+
+							<div id="posterMovieSide"><!-- poster goes here --></div>
+
+							<div id="movieInfoSide">
+
+								<div class="notReviewSide">
+
+									<div id="imdbInfoSide">
+
+										<div id="titleYearSide">
+
+										</div> <!--end of titleYear -->
+
+										<div id="ratingRuntimeGenreReleaseSide">
+
+
+										</div> <!-- End of ratingRuntimeGenreRelease -->
+
+										<div id="imdbPeopleSide">
+
+										</div>
+
+									</div> <!-- End of imdbInfo -->
+
+									<div id="rottenTomatoesDisplaySide">
+
+									</div> <!-- End of rottenTomatoesDisplay -->
+
+
+
+
+
+								</div> <!-- End of notReview div -->
+
+							</div> <!-- End of movieInfo div -->
+
+							<div class="reviewOfMovieSide">
+
+							</div><!-- end of reviewOfMovie -->
+
+						</div> <!-- End of movieInContainer div -->
+
+					</div> <!-- End of displayMovieReview div -->
 
 				</div> <!--End of div span12 box -->
 			</div><!-- End of row -->
