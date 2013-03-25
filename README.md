@@ -32,7 +32,8 @@ Phase 2:
 
 still need to work on for full proposed functionality:
 
--Table sorting the date Watched column needs to be fixed
+-Table sorting the date Watched column needs to be fixed (completed)
+-Added full functionality for the Delete Button, fix the fact it needs a page refresh to take away the table row (completed)
 
 
 
