@@ -26,18 +26,17 @@ Phase 2:
 -set popover to display from the bottom (completed)
 -have UrMovieReviews display (title, Ur Grade, RT Score, Year Released, Date Watched, Rating) - (completed)
 -have popover display (review, runtime, release date, director, writer, actors, plot) - (completed)
--add a rating (drop down or radio button) menu
-	-make a function that will divide a 1 through 10 rating by 10 and spit out a percentage
-	-call that function under the "Ur Grade" header
--add a input for entering the data (maybe with a jquery plugin)
--Style the page
-	-movie info inside of form (currently working on)
-	-add header to top of app
-	-add header title for table
+-add a rating plugin and have it go to JSON object and display on table (completed)
+-add a input for entering the data (maybe with a jquery plugin) (completed)
+
+
+still need to work on for full proposed functionality:
+
+-Table sorting the date Watched column needs to be fixed
 
 
 
-Phase 3: 
+Phase 3  (functionality passed what I proposed for this capstone project): 
 This phase will be to add a social aspect to the reviews.  
 I am thinking of having it where when I write a review it will either post a facebook status to check out this 
 review or I will push this review to a facebook note and update mystatus to read the review.
