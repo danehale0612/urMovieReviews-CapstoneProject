@@ -363,6 +363,7 @@
 				
 
 				addTomatoeToReview(reviewedMovie.rtscore, reviewedMovie.id);
+				$("#simpleTable").stupidtable();
 
 			};//End of addMovieToTable function
 
@@ -443,7 +444,7 @@ function deleteMovie (id) {
 			      }
 			    })
 			};
-			
+			$("#simpleTable").stupidtable();
 	}; // End of deleteMovie
 
 		</script>
@@ -493,7 +494,7 @@ function deleteMovie (id) {
 
 					<table id="simpleTable" class="table table-hover">
 						<thead>
-							<tr><th> </th><th data-sort="string"> Title </th><th data-sort="int">Grade</th><th data-sort="int">RT Score</th><th data-sort="int">Year Released</th><th data-sort="string">Date Watched</th></tr>
+							<tr><th> </th><th data-sort="string"> Title </th><th data-sort="int">Ur Score</th><th data-sort="int">RT Score</th><th data-sort="int">Year Released</th><th data-sort="string">Date Watched</th></tr>
 						</thead>
 						<tbody id="movieTable">
 							<tr>
