@@ -131,6 +131,8 @@
 
 
 
+		//Clears Review form
+
 		function clearForm() {
 			$('#putMovieInfo').html(" ");
 			$('input').each(function() {
@@ -139,6 +141,8 @@
 			});
 			$('#reviewForm').hide('slow');
 		};
+
+		//Adds the appropriate tomatoe img to the review (BEFORE it is submitted)
 
 		function addTomatoe(data) {
 			if (data.tomatoMeter < 60) {
@@ -149,6 +153,8 @@
 				$('#rottenTomatoesScore').append(' <img class="tomatoePic" src="img/tomatoes/FreshTomatoe.png" />');
 			}
 		};
+
+		//Adds the appropriate tomatoe img to the review (AFTER it is submitted)
 
 		function addTomatoeToReview(data) {
 			if (data.rtscore < 60) {
@@ -161,43 +167,12 @@
 		};
 
 
-		function testing (poster, title, year, rating, runtime, genre, rdate, plot, director, writer, actors, id, rtscore, review) {
-
-		}
-
-
-		// function displayReviewToDiv(poster, title, year, rating, runtime, genre, rdate, plot, director, writer, actors, id, rtscore, review) {
-		// 		console.log(id);
-		// 		$('#posterMovieSide').html(" ");
-		// 		$('#posterMovieSide').append('<img id="moviePosterSide" src="'+poster+'"></img>');
-
-
-		// 		$('#titleYearSide').html(" ");
-		// 		$('#titleYearSide').append('<div id="titleSide">'+title+'</div>'+' '+'('+year+')');
-
-		// 		$('#ratingRuntimeGenreReleaseSide').html(" ");
-		// 		$('#ratingRuntimeGenreReleaseSide').append('<div id="ratedSide"><strong>'+rating+'</strong></div>'+
-		// 										'<div id="lengthSide">'+runtime+'</div>'+
-		// 										'<div id="genreSide">'+genre+'</div>'+
-		// 										'<div id="releasedSide">'+rdate+'</div>');
-
-		// 		$('#imdbPeopleSide').html(" ");
-		// 		$('#imdbPeopleSide').append('<div id="plotSide">'+plot+'</div>'+
-		// 									'<div id="directorSide"><strong>Director:</strong> '+director+'</div>'+
-		// 									'<div id="writerSide"><strong>Writer:</strong> '+writer+'</div>'+
-		// 									'<div id="actorsSide"><strong>Stars:</strong> '+actors+'</div>');
-
-		// 		$('#rottenTomatoesDisplaySide').html(" ");
-		// 		$('#rottenTomatoesDisplaySide').append('<div id="'+id+'RTScoreSide"><div id="tomatoHeaderSide">TOMATOMETER:</div><br>'+rtscore+'%</div>');
-
-		// 		$('.reviewOfMovieSide').html(" ");
-		// 		$('.reviewOfMovieSide').append('<h4>Review:</h4>'+
-		// 						'<p>'+review+'</p>');
-		// 	};
-
+		
+		// Pushes a the movie you click on to the div to see the review
 
 		function displayReviewToDiv(id) {
-				
+				$('#displayMovieReview').show();
+
 				$.ajax({
 			      url: "backliftapp/movieDatabase/" + id,
 			      type: "GET",
@@ -239,6 +214,28 @@
 			};//End of displayReviewToDiv
 
 
+			//Delete a movie from the reviews table
+
+			function deleteMovie (id) {
+				  var conf = confirm("Are you sure you want to delete this movie?");
+				  if (conf == true) {
+				    $.ajax({
+				      url: "backliftapp/movieDatabase/" + id,
+				      type: "DELETE",
+				      dataType: "json",
+				      success: function () {
+
+				      	$('#movie'+id).hide();
+				      }
+				    })
+				};
+			
+			}; // End of deleteMovie
+
+
+
+
+
 			
 
 	//*********************** DOCUMENT.READY STARTS HERE *******************************
@@ -250,33 +247,39 @@
 
 			$('#reviewForm').hide();
 
+			$('#displayMovieReview').hide();
+
 			//************************** Popover function call *******************
 		
-				
+			refreshPage();
 			
 
 			//************************ Refresh Table Call *******************
+			function refreshPage () {
+				$.ajax({
+					url: "backliftapp/movieDatabase",
+					type: "GET",
+					dataType: "json",
+					success: function (data) {
+						$('#movieTable').html(' ');
+						for(var i = 0; i < data.length; i++) {
+							refreshMovieTable(data[i]);
+						}
 
-			$.ajax({
-				url: "backliftapp/movieDatabase",
-				type: "GET",
-				dataType: "json",
-				success: function (data) {
-					for(var i = 0; i < data.length; i++) {
-						refreshMovieTable(data[i]);
+
+						//Check to see if there is a previous movie to display
+
+						if (window.location.hash.length > 0) {
+							displayReviewToDiv(window.location.hash.substring(1));
+						}
 					}
 
+				}); //End of ajax
 
-					//Check to see if there is a previous movie to display
-
-					if (window.location.hash.length > 0) {
-						displayReviewToDiv(window.location.hash.substring(1));
-					}
-				}
-
-			}); //End of ajax
+			}; //End of refreshPage function
 
 
+			
 			//************************ search bar autocomplete (plugin) call ********************
 
 
@@ -287,6 +290,9 @@
 
    
    			//************************ Send form data to JSON object on movieDatabase ********************
+
+
+   			//Submitting the review to a JSON object and put in the movieDatabase
 
 			$('#submitMovieReview').click(function() {
 
@@ -320,13 +326,13 @@
 					dataType: "json",
 					data: reviewedMovie,
 					success: function (data) {
-						addMovieToTable(data);
+						refreshMovieTable(data);
 					}
 				});
 
 				
 				clearForm();
-
+				refreshPage();
 
 			}); // End of submitData.click
 
@@ -337,67 +343,14 @@
 
 			});
 
-			
 
+			//Anytime a the page needs a refresh or when there is a movie review added THIS runs
 
-
-			function addMovieToTable (reviewedMovie) {
-
-				$('#movieTable').append(
-					
-					'<tr id="'+reviewedMovie.title+'">'+
-						'<td><img class="displayMovieReview" src="'+reviewedMovie.poster+'" style="max-height: 40px;"/></td>'+
-						'<td>'+
-							'<a href="#moviePosterSide" id="'+reviewedMovie.id+'" onClick="displayReviewToDiv(\'' + reviewedMovie.id + '\')" '+
-
-							'>'+reviewedMovie.title+''+
-							'</a>'+
-						'</td>'+
-						'<td>'+reviewedMovie.myScore+'%</td><td>'+reviewedMovie.rtscore+'%</td>'+
-						'<td>'+reviewedMovie.yearReleased+'</td><td>'+reviewedMovie.dateWatched+'</td>'+
-						'<td><button id="deleteButton" type="submit" class="btn" onClick="deleteMovie(\'' + reviewedMovie.id + '\')">delete</button></td>'+
-					'</tr>'
-					
-				);//End of append method
-				
-				
-
-				addTomatoeToReview(reviewedMovie.rtscore, reviewedMovie.id);
-				$("#simpleTable").stupidtable();
-
-			};//End of addMovieToTable function
-
-
-			// function refreshMovieTable (reviewedMovie) {
-		
-			// 	$(
-			// 		'<tr id="'+reviewedMovie.title+'">'+
-			// 			'<td><img class="posterThumbnail" src="'+reviewedMovie.poster+'" style="max-height: 40px;"/></td>'+
-			// 			'<td>'+
-			// 				'<a href="#moviePosterSide" id="'+reviewedMovie.id+'" onClick="displayReviewToDiv(\'' + reviewedMovie.poster + '\', \'' + reviewedMovie.title + '\', \'' + reviewedMovie.yearReleased + '\', \'' + reviewedMovie.rating + '\', \'' + reviewedMovie.runtime + '\', \'' + reviewedMovie.genre + '\', \'' + reviewedMovie.releaseDate + '\', \'' + reviewedMovie.plot + '\', \'' + reviewedMovie.director + '\',\'' + reviewedMovie.writer + '\', \'' + reviewedMovie.actors + '\', \'' + reviewedMovie.id + '\', \'' + reviewedMovie.rtscore + '\', \'' + reviewedMovie.review + '\')" '+
-
-			// 				'>'+reviewedMovie.title+''+
-			// 				'</a>'+
-			// 			'</td>'+
-			// 			'<td>?</td><td>'+reviewedMovie.rtscore+'%</td>'+
-			// 			'<td>'+reviewedMovie.yearReleased+'</td><td>'+reviewedMovie.dateWatched+'</td>'+
-			// 			'<td><button id="deleteButton" type="submit" class="btn" onClick="deleteMovie(\'' + reviewedMovie.id + '\')">delete</button></td>'+
-			// 		'</tr>'
-
-			// 	).appendTo('#movieTable');
-			// 		console.log(reviewedMovie.review);
-					
-			// 	$('.reviewRow').hide();
-
-			// 	addTomatoeToReview(reviewedMovie.rtscore, reviewedMovie.id);
-
-				
-			// };
 
 			function refreshMovieTable (reviewedMovie) {
 		
 				$(
-					'<tr id="'+reviewedMovie.title+'">'+
+					'<tr id="movie'+reviewedMovie.id+'">'+
 						'<td><img class="posterThumbnail" src="'+reviewedMovie.poster+'" style="max-height: 40px;"/></td>'+
 						'<td>'+
 							'<a href="#'+reviewedMovie.id+'" id="'+reviewedMovie.id+'" onClick="displayReviewToDiv(\'' + reviewedMovie.id + '\')" '+
@@ -419,33 +372,12 @@
 
 				
 			};
-
-
-
-			
-
-		
-
-			
 			
 
 		});//End of doc.ready function
 
 
-function deleteMovie (id) {
-			  var conf = confirm("Are you sure you want to delete this movie?");
-			  if (conf == true) {
-			    $.ajax({
-			      url: "backliftapp/movieDatabase/" + id,
-			      type: "DELETE",
-			      dataType: "json",
-			      success: function () {
-			      	
-			      }
-			    })
-			};
-			$("#simpleTable").stupidtable();
-	}; // End of deleteMovie
+
 
 		</script>
 	</head>
@@ -501,6 +433,9 @@ function deleteMovie (id) {
 								</td>
 							</tr>
 						</tbody>
+						<div>
+							<p id="tableAdvice">Click column headers to sort</p>
+						</div>
 					</table>
 
 					<div id="displayMovieReview">
