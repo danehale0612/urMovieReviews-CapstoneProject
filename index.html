@@ -4,7 +4,7 @@
 
 	<head>
 
-		<title>Ur Movie Reviews</title>
+		<title>My Movie Reviews</title>
 
 		<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 
@@ -295,6 +295,12 @@
    			//Submitting the review to a JSON object and put in the movieDatabase
 
 			$('#submitMovieReview').click(function() {
+				console.log($('#backing2').val());
+				if($.trim($('#review').val()).length === 0 ||
+					$.trim($("#datePicker").val()).length === 0) {
+
+					alert("Must Review Movie, Rate it, and Select a Date Watched!");
+				} else {
 
 				var myScorePercentage = ($('#backing2').val()/10)*100;
 
@@ -334,6 +340,8 @@
 				clearForm();
 				refreshPage();
 
+
+				}//End of if Statement
 			}); // End of submitData.click
 
 
@@ -391,8 +399,7 @@
 
 			<div class="row>"
 				<div class="span12 box">
-						
-
+						<a href="https://urmoviereviews-bt5jw.backliftapp.com/" class="noStyle"><h1 id="headerTitle">MY MOVIE REVIEWS</h1></a>
 						<div id="searchBar">
 							<label for="testing">Search for A Movie</label>
 							<input id="testing">
@@ -406,17 +413,22 @@
 						</div>
 						<div id="reviewForm">
 							<form>
-					 			<label for="review"><h3>Write Ur Review</h3></label>
+					 			<label for="review"><h3>Write Review</h3></label>
 								<textarea id="review" style="width: 700px; height: 200px;"></textarea>
 								<br>
 							</form>
 
-							<label for="rateit"><h3>Rate this movie:</h3></label>
-							<input type="range" min="0" max="10" step="0.5" id="backing2">
-							<div class="rateit" data-rateit-backingfld="#backing2"></div>
+							<div id="ratingPlugin">
+								<label for="rateit"><h3>Rate this movie:</h3></label>
+								<input type="range" min="0" max="10" step="0.5" id="backing2">
+								<div class="rateit" data-rateit-backingfld="#backing2"></div>
+							</div>
 
-							<label for="jdpicker"><h3>Date Watched:</h3></label>
-							<input type="text" id="datePicker" name="your_input" class="jdpicker" />
+							<div id="datePickerPlugin">
+								<label for="jdpicker"><h3>Date Watched:</h3></label>
+								<input type="text" id="datePicker" name="your_input" class="jdpicker" />
+							</div>
+
 						</div> <!--End of reviewForm -->
 						<div id="formButtons">
 							<button id="submitMovieReview" type="submit" class="btn" aria-hidden="true">Submit</button>
@@ -425,6 +437,7 @@
 						<br>
 
 					<table id="simpleTable" class="table table-hover">
+						<h2 id="tableTitle">My Movies Reviewed</h2>
 						<thead>
 							<tr><th> </th><th data-sort="string"> Title </th><th data-sort="int">Ur Score</th><th data-sort="int">RT Score</th><th data-sort="int">Year Released</th><th data-sort="string">Date Watched</th></tr>
 						</thead>
