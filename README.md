@@ -20,7 +20,7 @@ database)
 added show and hide for the form, added the ability to put quotes in a review, added movie year to the review title, added a cancel button on form"
 [master ae3148a] added show and hide for the form, added the ability to put quotes in a review, added movie year to the review title, added a cancel button on form
 
-Phase 2:
+Phase 2(completed) - End of proposed functionality:
 
 -add a table sorter plugin to UrMovieReviews (completed)
 -set popover to display from the bottom (completed)
@@ -32,7 +32,8 @@ Phase 2:
 
 still need to work on for full proposed functionality:
 
--Table sorting the date Watched column needs to be fixed
+-Table sorting the date Watched column needs to be fixed (completed)
+-Added full functionality for the Delete Button, fix the fact it needs a page refresh to take away the table row (completed)
 
 
 
