@@ -35,6 +35,7 @@ still need to work on for full proposed functionality:
 -Table sorting the date Watched column needs to be fixed (completed)
 -Added full functionality for the Delete Button, fix the fact it needs a page refresh to take away the table row (completed)
 -add validation to submit review button.  If no review or date watched is entered, don't submit.  (completed)
+-have it where only the table or a review is on display at a time. (completed)
 
 
 Phase 3  (functionality passed what I proposed for this capstone project): 
