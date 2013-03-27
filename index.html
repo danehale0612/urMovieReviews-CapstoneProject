@@ -71,6 +71,7 @@
 			        }); //End of ajax
 
 			        $('#reviewForm').show('slow');
+			        showMovieReviewsTable();
 		};
 
 
@@ -166,12 +167,19 @@
 			}
 		};
 
+		function showMovieReviewsTable() {
+			window.location='#';
+			$('#displayMovieReview').hide('slow');
+			$('#simpleTable').show('slow ');
+		};
+
 
 		
 		// Pushes a the movie you click on to the div to see the review
 
 		function displayReviewToDiv(id) {
-				$('#displayMovieReview').show();
+				$('#simpleTable').hide('slow');
+				$('#displayMovieReview').show('slow');
 
 				$.ajax({
 			      url: "backliftapp/movieDatabase/" + id,
@@ -204,7 +212,8 @@
 
 				$('.reviewOfMovieSide').html(" ");
 				$('.reviewOfMovieSide').append('<h4>Review:</h4>'+
-								'<p>'+data.review+'</p>');
+								'<p>'+data.review+'</p>'+
+								'<button href="#" id="backToReviews" type="submit" class="btn" onClick="showMovieReviewsTable()">Back to Reviews</button>');
 
 
 			      	addTomatoeToReview(data);
@@ -299,46 +308,46 @@
 				if($.trim($('#review').val()).length === 0 ||
 					$.trim($("#datePicker").val()).length === 0) {
 
-					alert("Must Review Movie, Rate it, and Select a Date Watched!");
-				} else {
+						alert("Must Review Movie, Rate it, and Select a Date Watched!");
+					} else {
 
-				var myScorePercentage = ($('#backing2').val()/10)*100;
+					var myScorePercentage = ($('#backing2').val()/10)*100;
 
 
-				reviewedMovie = {
-				poster: $("#posterInput").val(),
-				title: $("#titleInput").val(),
-				rating: $("#ratedInput").val(),
-				runtime: $("#lengthInput").val(),
-				yearReleased: $("#yearInput").val(),
-				releaseDate: $("#releasedInput").val(),
-				dateWatched: $("#datePicker").val(),
-				director: $("#directorInput").val(),
-				writer: $("#writerInput").val(),
-				actors: $("#actorsInput").val(),
-				plot: $("#plotInput").val(),
-				genre: $("#genreInput").val(),
-				rtscore: $("#rtScore").val(),
-				imdbID: $("#imdbID").val(),
-				review: $('#review').val(),
-				myScore: myScorePercentage
-				};
- 				
- 				
+					reviewedMovie = {
+					poster: $("#posterInput").val(),
+					title: $("#titleInput").val(),
+					rating: $("#ratedInput").val(),
+					runtime: $("#lengthInput").val(),
+					yearReleased: $("#yearInput").val(),
+					releaseDate: $("#releasedInput").val(),
+					dateWatched: $("#datePicker").val(),
+					director: $("#directorInput").val(),
+					writer: $("#writerInput").val(),
+					actors: $("#actorsInput").val(),
+					plot: $("#plotInput").val(),
+					genre: $("#genreInput").val(),
+					rtscore: $("#rtScore").val(),
+					imdbID: $("#imdbID").val(),
+					review: $('#review').val(),
+					myScore: myScorePercentage
+					};
+	 				
+	 				
 
-				$.ajax({
-					url: "backliftapp/movieDatabase",
-					type: "POST",
-					dataType: "json",
-					data: reviewedMovie,
-					success: function (data) {
-						refreshMovieTable(data);
-					}
-				});
+					$.ajax({
+						url: "backliftapp/movieDatabase",
+						type: "POST",
+						dataType: "json",
+						data: reviewedMovie,
+						success: function (data) {
+							refreshMovieTable(data);
+						}
+					});
 
-				
-				clearForm();
-				refreshPage();
+					
+					clearForm();
+					refreshPage();
 
 
 				}//End of if Statement
@@ -350,6 +359,7 @@
 				clearForm();
 
 			});
+
 
 
 			//Anytime a the page needs a refresh or when there is a movie review added THIS runs
@@ -429,17 +439,20 @@
 								<input type="text" id="datePicker" name="your_input" class="jdpicker" />
 							</div>
 
+						
+							<div id="formButtons">
+								<button id="submitMovieReview" type="submit" class="btn" aria-hidden="true">Submit</button>
+								<button id="cancelMovieReview" type="submit" class="btn" aria-hidden="true">Cancel</button>
+							</div>
+
 						</div> <!--End of reviewForm -->
-						<div id="formButtons">
-							<button id="submitMovieReview" type="submit" class="btn" aria-hidden="true">Submit</button>
-							<button id="cancelMovieReview" type="submit" class="btn" aria-hidden="true">Cancel</button>
-						</div>
+
 						<br>
 
 					<table id="simpleTable" class="table table-hover">
 						<h2 id="tableTitle">My Movies Reviewed</h2>
 						<thead>
-							<tr><th> </th><th data-sort="string"> Title </th><th data-sort="int">Ur Score</th><th data-sort="int">RT Score</th><th data-sort="int">Year Released</th><th data-sort="string">Date Watched</th></tr>
+							<tr><th> </th><th data-sort="string"> Title </th><th data-sort="int">My Score</th><th data-sort="int">RT Score</th><th data-sort="int">Year Released</th><th data-sort="string">Date Watched</th></tr>
 						</thead>
 						<tbody id="movieTable">
 							<tr>
