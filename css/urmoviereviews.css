@@ -7,6 +7,303 @@
 
 };
 
+.noStyle {
+	text-decoration: none;
+	color: black;
+}
+
+.noStyle:hover {
+	text-decoration: none;
+}
+
+#searchForm {
+	
+}
+
+#putMovieInfo {
+	display: block;
+	overflow: hidden;
+
+}
+
+#posterMovie {
+	max-width: 300px;
+	display: block;
+	float: left;
+}
+
+#movieInfo {
+	display: block;
+	float: left;
+	width: 400px;
+}
+
+	#imdbInfo {
+	padding: 5px;
+	margin-left: 10px;
+	border: 1px solid #EEEEED;
+	float: left;
+	}
+
+	#rottenTomatoesDisplay {
+	padding: 5px;
+	margin-left: 10px;
+	margin-top: 10px;
+	border: 1px solid #EEEEED;
+	text-align: center;
+	font-size: 25px;
+	float: left;
+	}
+		#tomatoHeader {
+			font-size: 20px;
+		}
+
+/* Inside of #putMovieInfo */
+#titleYear {
+	display: block;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+	#title {
+		display: block;
+		float: left;
+		font-size: 22px;
+		margin-right: 10px;
+		margin-bottom: 5px;
+	}
+
+#ratingRuntimeGenreRelease {
+	display: block;
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+	#rated {
+		display: block;
+		float: left;
+		padding: 0px 4px;
+		margin-right: 12px;
+		border: 1px solid #000; 
+		font-family: serif;
+	}
+
+	#length {
+		display: block;
+		float: left;
+		margin-right: 12px;
+	}
+
+	#genre {
+		display: block;
+		float: left;
+		margin-right: 12px;
+	}
+
+	#released  {
+		display: block;
+		float: left;
+	}
+
+#plot {
+	margin-bottom: 15px;
+}
+
+#rottenTomatoesScore {
+	display: block;
+	float: left;
+}
+
+.rottenTomatoesScoreReview {
+	display: block;
+	float: left;
+}
+
+form {
+	margin-top: 20px;
+}
+
+#ratingPlugin {
+	margin-left: 200px;
+}
+
+#datePickerPlugin {
+	margin-left: 200px;
+}
+
+
+#searchBar{
+	text-align: center;
+}
+
+#formButtons {
+	text-align: center;
+}
+
+.reviewRow {
+	display: hidden;
+}
+
+
+	
+	.notReview {
+		display: block;
+		float: left;
+	}
+
+	.reviewOfMovie {
+		display: block;
+		float: left;
+		margin-top: 20px;
+	}
+
+#simpleTable {
+	text-align: center;
+	min-width: 520px;
+}
+
+#displayMovieReview {
+	display: block;
+	float: left;
+}
+
+
+/* This is for the Review that shows up next to the table */
+
+.movieInfoContainer {
+	float: left;
+	display: block;
+	overflow: hidden;
+}
+	
+	.notReviewSide {
+		display: block;
+		float: left;
+	}
+
+	.reviewOfMovieSide {
+		display: block;
+		float: left;
+		margin-top: 20px;
+	}
+
+#posterMovieSide {
+	max-width: 400px;
+	display: block;
+	float: left;
+}
+
+#movieInfoSide {
+	margin-left: 10px;
+	display: block;
+	float: left;
+	width: 400px;
+
+}
+
+	#imdbInfoSide {
+	padding: 5px;
+	border: 1px solid #EEEEED;
+	float: left;
+	}
+
+	#rottenTomatoesDisplaySide {
+	padding: 5px;
+	margin-top: 10px;
+	border: 1px solid #EEEEED;
+	text-align: center;
+	font-size: 25px;
+	float: left;
+	}
+		#tomatoHeaderSide {
+			font-size: 20px;
+		}
+
+/* Inside of #putMovieInfo */
+#titleYearSide {
+	display: block;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+	#titleSide {
+		display: block;
+		float: left;
+		font-size: 22px;
+		margin-right: 10px;
+		margin-bottom: 5px;
+	}
+
+#ratingRuntimeGenreReleaseSide {
+	display: block;
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+	#ratedSide {
+		display: block;
+		float: left;
+		padding: 0px 4px;
+		margin-right: 12px;
+		border: 1px solid #000; 
+		font-family: serif;
+	}
+
+	#lengthSide {
+		display: block;
+		float: left;
+		margin-right: 12px;
+	}
+
+	#genreSide {
+		display: block;
+		float: left;
+		margin-right: 12px;
+	}
+
+	#releasedSide  {
+		display: block;
+		float: left;
+	}
+
+#plotSide {
+	margin-bottom: 15px;
+}
+
+#rottenTomatoesScoreSide {
+	display: block;
+	float: left;
+}
+
+.rottenTomatoesScoreReviewSide {
+	display: block;
+	float: left;
+}
+
+#tableAdvice {
+	font-style: italic;
+	font-color: gray;
+	font-size: 12px;
+}
+
+
+
+#headerTitle {
+	text-align: center;
+	font-size: 45px;
+	font-weight: lighter;
+	margin-bottom: 60px;
+	color: black;
+}
+
+#tableTitle {
+	font-weight: lighter;
+	text-align: center;
+}
+
+#tableAdvice {
+	text-align: center;
+}
+
+
 /*.posterThumbnail {
 	max-width: 20px;
 	max-height: 20px;
