@@ -150,7 +150,7 @@
 		function addTomatoe(data) {
 			if (data.tomatoMeter < 60) {
 				$('#rottenTomatoesScore').append(' <img class="tomatoePic" src="img/tomatoes/RottenTomatoe.png" />');
-			} else if (data.tomatoMeter > 75 && data.tomatoReviews > 40) {
+			} else if (data.tomatoMeter > 74 && data.tomatoReviews > 39) {
 				$('#rottenTomatoesScore').append(' <img class="tomatoePic" src="img/tomatoes/CertFreshTomatoe.png" />');
 			} else {
 				$('#rottenTomatoesScore').append(' <img class="tomatoePic" src="img/tomatoes/FreshTomatoe.png" />');
@@ -162,7 +162,7 @@
 		function addTomatoeToReview(data) {
 			if (data.rtscore < 60) {
 				$('#rottenTomatoesScoreSide').append(' <img class="tomatoePic" src="img/tomatoes/RottenTomatoe.png" />');
-			} else if (data.rtscore > 75 && data.tomatoReviews > 40) {
+			} else if (data.rtscore > 74 && data.tomatoReviews > 39) {
 				$('#rottenTomatoesScoreSide').append(' <img class="tomatoePic" src="img/tomatoes/CertFreshTomatoe.png" />');
 			} else {
 				$('#rottenTomatoesScoreSide').append(' <img class="tomatoePic" src="img/tomatoes/FreshTomatoe.png" />');
