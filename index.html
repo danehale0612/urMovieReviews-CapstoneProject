@@ -99,6 +99,7 @@
 				'<input type="hidden" id="actorsInput" value="'+data.Actors+'">'+
 				'<input type="hidden" id="rtScore" value="'+data.tomatoMeter+'">'+
 				'<input type="hidden" id="imdbID" value="'+data.imdbID+'">'+
+				'<input type="hidden" id="tomatoReviews" value="'+data.tomatoReviews+'">'+
 				'<input type="hidden" id="myRating">'+
 
 
@@ -151,7 +152,7 @@
 		function addTomatoe(data) {
 			if (data.tomatoMeter < 60) {
 				$('#rottenTomatoesScore').append(' <img class="tomatoePic" src="img/tomatoes/RottenTomatoe.png" />');
-			} else if (data.tomatoMeter > 75) {
+			} else if (data.tomatoMeter > 75 && data.tomatoReviews > 40) {
 				$('#rottenTomatoesScore').append(' <img class="tomatoePic" src="img/tomatoes/CertFreshTomatoe.png" />');
 			} else {
 				$('#rottenTomatoesScore').append(' <img class="tomatoePic" src="img/tomatoes/FreshTomatoe.png" />');
@@ -163,7 +164,7 @@
 		function addTomatoeToReview(data) {
 			if (data.rtscore < 60) {
 				$('#rottenTomatoesScoreSide').append(' <img class="tomatoePic" src="img/tomatoes/RottenTomatoe.png" />');
-			} else if (data.rtscore > 75) {
+			} else if (data.rtscore > 75 && data.tomatoReviews > 40) {
 				$('#rottenTomatoesScoreSide').append(' <img class="tomatoePic" src="img/tomatoes/CertFreshTomatoe.png" />');
 			} else {
 				$('#rottenTomatoesScoreSide').append(' <img class="tomatoePic" src="img/tomatoes/FreshTomatoe.png" />');
@@ -334,6 +335,7 @@
 					rtscore: $("#rtScore").val(),
 					imdbID: $("#imdbID").val(),
 					review: $('#review').val(),
+					tomatoReviews: $('#tomatoReviews').val(),
 					myScore: myScorePercentage
 					};
 	 				
