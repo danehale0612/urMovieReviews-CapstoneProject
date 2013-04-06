@@ -36,11 +36,10 @@
 		function searchMovies(request, response) {
 		    
 		    $.ajax({
-		        url: "http://www.omdbapi.com/?s=" + request['term'] + "&r=JSON",
+		        url: "http://www.omdbapi.com/?s=" + request['term'] + "&tomatoes=true",
 		        type: "GET",
 		        dataType: "json",
 		        success: function (data) {
-		 			console.log(data);
 		            var searchArray = data['Search'];
 		            var results = [];
 		            for(var i = 0; i < searchArray.length; i++) {
@@ -58,8 +57,7 @@
 		//**************************** Grab individual movie info from OMDBapi.com ************************
 
 		function grabMovieInfo (ui) {
-			
-			// console.log(ui.item);	
+
 
 					$.ajax({
 			        url: "http://www.omdbapi.com/?i=" + ui.item.id + "&tomatoes=true",
@@ -309,7 +307,6 @@
    			//Submitting the review to a JSON object and put in the movieDatabase
 
 			$('#submitMovieReview').click(function() {
-				console.log($('#backing2').val());
 				if($.trim($('#review').val()).length === 0 ||
 					$.trim($("#datePicker").val()).length === 0) {
 
