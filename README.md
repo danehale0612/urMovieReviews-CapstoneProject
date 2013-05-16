@@ -1,3 +1,7 @@
+UPDATE:  The API I used to retrieve the data on movies is no longer in existence.  This app will not work until I find a similar API and update this app with it.
+
+
+
 This my NSS (part 1) Capstone project. This is an app that's purpose is for "movie nerds" to keep track of what they have seen and organize most popular data in a fashion to use for discussion later. First type a movie in a search bar. That search bar will display a list of movies depending on your input (which will reference omdb api). Once selecting a suggested movie a form with pre-loaded movie data will display and the user will enter a review along with some other info. Then this review and info will be stored in a table that can be sorted based on most popular information. I am doing GET, DELETE, POST with JSON objects in order to make this app functional.
 
 What has been done prior to this (This whole section is completed):
