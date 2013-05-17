@@ -1,4 +1,3 @@
-UPDATE:  The API I used to retrieve the data on movies is no longer in existence.  This app will not work until I find a similar API and update this app with it.
 
 
 
